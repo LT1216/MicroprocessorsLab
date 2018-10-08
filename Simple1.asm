@@ -7,13 +7,17 @@
 	org 0x100		    ; Main code starts here at address 0x100
 
 start
+	movlw	0xFF		    
+	movwf	TRISD, ACCESS	    ; Port D to input
+	movff	PORTD, 0x05	    ; Getting port D value to storage
 	movlw 	0x0
-	movwf	TRISB, ACCESS	    ; Port C all outputs
+	movwf	TRISC, ACCESS	    ; Port C all outputs
 	bra 	test
 loop	movff 	0x06, PORTC
 	incf 	0x06, W, ACCESS
 test	movwf	0x06, ACCESS	    ; Test for end of loop condition
-	movlw 	0x63
+	;movlw 	0x63		    
+	movf	PORTD, W, ACCESS				    
 	cpfsgt 	0x06, ACCESS
 	bra 	loop		    ; Not yet finished goto start of loop again
 	goto 	0x0		    ; Re-run program from start

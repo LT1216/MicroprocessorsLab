@@ -30,7 +30,8 @@ test	movwf	0x06, ACCESS	    ; Test for end of loop condition
 
 delay	
 	movff 0x1F , 0x20	    ; reloading the initial value of decrement	
-delay_loop	decfsz 0x20	
+
+	delay_loop	decfsz 0x20	
 	bra delay_loop	    ; reloading the initial value of decrement
 	return
 	

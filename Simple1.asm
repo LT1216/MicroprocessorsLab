@@ -9,21 +9,29 @@
 start
 	movlw	0xFF		    ; determining delay start value
 	movwf	0x1F		    ; position start value of delay decrement
-	;movlw  0x10		    ; determining delay2 start value
+	;movlw	0x10		    ; determining delay2 start value
 	movwf	0x21		    ; position start value of delay2 decrement
 	
-	movlw	0xFF		    
-	movwf	TRISD, ACCESS	    ; Port D to input
-	movff	PORTD, 0x05	    ; Getting port D value to storage
-	movlw 	0x0
-	movwf	TRISC, ACCESS	    ; Port C all outputs
+	movlw	0x00		    
+	movwf	TRISE, ACCESS	    ; Port E to output
+	movwf	TRISF, ACCESS	    ; Port F to output
+	
+	movlw 	0x0		    ;counter begining
+	bsf	PORTE, 0, ACCESS    ; initial clockpulse pull up
 	bra 	test
-loop	movff 	0x06, PORTC
+loop	movff 	0x06, PORTF
 	incf 	0x06, W, ACCESS
 test	movwf	0x06, ACCESS	    ; Test for end of loop condition
-	;movlw 	0x63
 	call	delay2
-	movf	PORTD, W, ACCESS				    
+	bcf 	PORTE, 0, ACCESS    ; clock pulse down
+	nop			    ; cushion time for flop
+	nop
+	nop
+	movf	0x1F, W, ACCESS	    ; data write out
+	nop
+	nop
+	nop
+	bsf	PORTE, 0, ACCESS    ; clockpulse pull up
 	cpfsgt 	0x06, ACCESS
 	bra 	loop		    ; Not yet finished goto start of loop again
 	goto 	0x0		    ; Re-run program from start

@@ -12,37 +12,44 @@ start
 	call read1
 
 
+	constant databusadr=0x30    ; special register in ACCESS bank where
+				    ; reads from and write to
 	
 setup
 	movlw	0x00
 	movwf	TRISD, ACCESS	    ; setting Port D to output (control bus)
 	movlw	0x55
 	movwf	PORTD
+	movlw	0xFF
+	movwf	TRISE		    ; setting Port E to not driving state
 	return
 	
 read1
-	;databus to input
+	movlw	0xFF
+	movwf	TRISE		    ;databus to input
 	bcf	PORTD, 0	    ; OE1 to zero
 	bsf	PORTD, 1	    ; clock pulse pull up
 	nop
 	nop
 	nop
-	; pull Port E to register
+	movff PORTE, databusadr	    ; pull Port E to register
 	nop
 	bcf	PORTD, 1	    ; clock pulse down
 	bsf	PORTD, 0	    ; OE1 to one, output for chip turned off
 	return
 	
 write1
-	; databus to output
-	; databus gets written value
+	movlw 0x00
+	movwf TRISE		    ; databus to output
+	movff databusadr, PORTE	    ; databus gets written value
 	bsf	PORTD, 1	    ; clock pulse pull up
 	nop
 	nop
 	nop
 	nop
 	bcf	PORTD, 1	    ; clock pulse down
-	; databus to Tris state
+	movlw	0xFF
+	movwf	TRISE		    ; databus to Tris state
 	return
 	
 	

@@ -53,4 +53,89 @@ write1
 	return
 	
 	
+	
+read2
+	movlw	0xFF
+	movwf	TRISE		    ;databus to input
+	bcf	PORTD, 2	    ; OE1 to zero
+	bsf	PORTD, 3	    ; clock pulse pull up
+	nop
+	nop
+	nop
+	movff PORTE, databusadr	    ; pull Port E to register
+	nop
+	bcf	PORTD, 3	    ; clock pulse down
+	bsf	PORTD, 2	    ; OE1 to one, output for chip turned off
+	return
+	
+write2
+	movlw 0x00
+	movwf TRISE		    ; databus to output
+	movff databusadr, PORTE	    ; databus gets written value
+	bsf	PORTD, 3	    ; clock pulse pull up
+	nop
+	nop
+	nop
+	nop
+	bcf	PORTD, 3	    ; clock pulse down
+	movlw	0xFF
+	movwf	TRISE		    ; databus to Tris state
+	return
+	
+read3
+	movlw	0xFF
+	movwf	TRISE		    ;databus to input
+	bcf	PORTD, 4	    ; OE1 to zero
+	bsf	PORTD, 5	    ; clock pulse pull up
+	nop
+	nop
+	nop
+	movff PORTE, databusadr	    ; pull Port E to register
+	nop
+	bcf	PORTD, 5	    ; clock pulse down
+	bsf	PORTD, 4	    ; OE1 to one, output for chip turned off
+	return
+	
+write3
+	movlw 0x00
+	movwf TRISE		    ; databus to output
+	movff databusadr, PORTE	    ; databus gets written value
+	bsf	PORTD, 5	    ; clock pulse pull up
+	nop
+	nop
+	nop
+	nop
+	bcf	PORTD, 5	    ; clock pulse down
+	movlw	0xFF
+	movwf	TRISE		    ; databus to Tris state
+	return	
+	
+read4
+	movlw	0xFF
+	movwf	TRISE		    ;databus to input
+	bcf	PORTD, 6	    ; OE1 to zero
+	bsf	PORTD, 7	    ; clock pulse pull up
+	nop
+	nop
+	nop
+	movff PORTE, databusadr	    ; pull Port E to register
+	nop
+	bcf	PORTD, 7	    ; clock pulse down
+	bsf	PORTD, 6	    ; OE1 to one, output for chip turned off
+	return
+	
+write4
+	movlw 0x00
+	movwf TRISE		    ; databus to output
+	movff databusadr, PORTE	    ; databus gets written value
+	bsf	PORTD, 7	    ; clock pulse pull up
+	nop
+	nop
+	nop
+	nop
+	bcf	PORTD, 6	    ; clock pulse down
+	movlw	0xFF
+	movwf	TRISE		    ; databus to Tris state
+	return
+	
 	end

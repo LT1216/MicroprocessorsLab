@@ -7,11 +7,28 @@
 	org 0x100		    ; Main code starts here at address 0x100
 
 start
+	clrf TRISC		    ; turn Port C to output
+	
 	call setup
 	nop
+	movlw 0xA3
+	movwf databusadr
+	call write1
+	
+	
+	movlw 0x66		    ; change data to be sure that the original value is really stored in the chip
+	movwf databusadr
+	movff databusadr,PORTC
+	
 	call read1
-
-
+	
+	movff databusadr, PORTC
+	nop
+	nop
+	nop
+	nop
+	goto 0x0
+	
 	constant databusadr=0x30    ; special register in ACCESS bank where
 				    ; reads from and write to
 	
@@ -40,7 +57,7 @@ read1
 	
 write1
 	clrf TRISE		    ; databus to output
-	movff databusadr, PORTE	    ; databus gets written value
+	movff databusadr, PORTE	    ; databus gets to be written value
 	bsf	PORTD, 1	    ; clock pulse pull up
 	nop
 	nop

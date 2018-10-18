@@ -16,20 +16,17 @@ start
 				    ; reads from and write to
 	
 setup
-	movlw	0x00
-	movwf	TRISD, ACCESS	    ; setting Port D to output (control bus)
+	clrf	TRISD, ACCESS	    ; setting Port D to output (control bus)
 	movlw	0x55
 	movwf	PORTD
 	banksel PADCFG1		    ; PADCFG1 is not in Access Bank!! 
 	bsf PADCFG1, REPU, BANKED   ; PortE pull-ups on 
 	movlb 0x00		    ; set BSR back to Bank 0 
-	movlw	0xFF
-	movwf	TRISE		    ; setting Port E to not driving state
+	setf	TRISE		    ; setting Port E to not driving state
 	return
 	
 read1
-	movlw	0xFF
-	movwf	TRISE		    ;databus to input
+	setf	TRISE		    ;databus to input
 	bcf	PORTD, 0	    ; OE1 to zero
 	bsf	PORTD, 1	    ; clock pulse pull up
 	nop
@@ -42,8 +39,7 @@ read1
 	return
 	
 write1
-	movlw 0x00
-	movwf TRISE		    ; databus to output
+	clrf TRISE		    ; databus to output
 	movff databusadr, PORTE	    ; databus gets written value
 	bsf	PORTD, 1	    ; clock pulse pull up
 	nop
@@ -51,15 +47,13 @@ write1
 	nop
 	nop
 	bcf	PORTD, 1	    ; clock pulse down
-	movlw	0xFF
-	movwf	TRISE		    ; databus to Tris state
+	setf	TRISE		    ; databus to Tris state
 	return
 	
 	
 	
 read2
-	movlw	0xFF
-	movwf	TRISE		    ;databus to input
+	setf	TRISE		    ;databus to input
 	bcf	PORTD, 2	    ; OE1 to zero
 	bsf	PORTD, 3	    ; clock pulse pull up
 	nop
@@ -72,8 +66,7 @@ read2
 	return
 	
 write2
-	movlw 0x00
-	movwf TRISE		    ; databus to output
+	clrf TRISE		    ; databus to output
 	movff databusadr, PORTE	    ; databus gets written value
 	bsf	PORTD, 3	    ; clock pulse pull up
 	nop
@@ -81,13 +74,11 @@ write2
 	nop
 	nop
 	bcf	PORTD, 3	    ; clock pulse down
-	movlw	0xFF
-	movwf	TRISE		    ; databus to Tris state
+	setf	TRISE		    ; databus to Tris state
 	return
 	
 read3
-	movlw	0xFF
-	movwf	TRISE		    ;databus to input
+	setf	TRISE		    ;databus to input
 	bcf	PORTD, 4	    ; OE1 to zero
 	bsf	PORTD, 5	    ; clock pulse pull up
 	nop
@@ -100,8 +91,7 @@ read3
 	return
 	
 write3
-	movlw 0x00
-	movwf TRISE		    ; databus to output
+	clrf TRISE		    ; databus to output
 	movff databusadr, PORTE	    ; databus gets written value
 	bsf	PORTD, 5	    ; clock pulse pull up
 	nop
@@ -109,13 +99,11 @@ write3
 	nop
 	nop
 	bcf	PORTD, 5	    ; clock pulse down
-	movlw	0xFF
-	movwf	TRISE		    ; databus to Tris state
+	setf	TRISE		    ; databus to Tris state
 	return	
 	
 read4
-	movlw	0xFF
-	movwf	TRISE		    ;databus to input
+	setf	TRISE		    ;databus to input
 	bcf	PORTD, 6	    ; OE1 to zero
 	bsf	PORTD, 7	    ; clock pulse pull up
 	nop
@@ -128,8 +116,7 @@ read4
 	return
 	
 write4
-	movlw 0x00
-	movwf TRISE		    ; databus to output
+	clrf TRISE		    ; databus to output
 	movff databusadr, PORTE	    ; databus gets written value
 	bsf	PORTD, 7	    ; clock pulse pull up
 	nop
@@ -137,8 +124,7 @@ write4
 	nop
 	nop
 	bcf	PORTD, 6	    ; clock pulse down
-	movlw	0xFF
-	movwf	TRISE		    ; databus to Tris state
+	setf	TRISE		    ; databus to Tris state
 	return
 	
 	end

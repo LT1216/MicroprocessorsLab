@@ -20,6 +20,9 @@ setup
 	movwf	TRISD, ACCESS	    ; setting Port D to output (control bus)
 	movlw	0x55
 	movwf	PORTD
+	banksel PADCFG1		    ; PADCFG1 is not in Access Bank!! 
+	bsf PADCFG1, REPU, BANKED   ; PortE pull-ups on 
+	movlb 0x00		    ; set BSR back to Bank 0 
 	movlw	0xFF
 	movwf	TRISE		    ; setting Port E to not driving state
 	return

@@ -16,7 +16,13 @@ start
 	nop
 	nop
 	;delay?
-	goto 0x0
+	movlw 0xA4		    ; 2nd piece of data
+	call SPI_MasterTransmit
+	nop
+	nop
+	nop
+	;delay?
+	goto finish
 setup
 	movlw	0xFF		    ; determining delay start value
 	movwf	0x1F		    ; position start value of delay decrement
@@ -59,5 +65,5 @@ delay2_loop	call delay
 	bra delay2_loop	    ; reloading the initial value of decrement
 	return	
 	
-	
+finish	
 	end

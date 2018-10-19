@@ -13,14 +13,14 @@ start
 	nop
 	movlw 0xA3
 	movwf databusadr
-	call write1
+	call write2
 	
 	
 	movlw 0x66		    ; change data to be sure that the original value is really stored in the chip
 	movwf databusadr
 	movff databusadr,PORTC
 	
-	call read1
+	call read2
 	
 	movff databusadr, PORTC
 	nop

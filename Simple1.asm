@@ -2,6 +2,7 @@
 
 	extern	UART_Setup, UART_Transmit_Message  ; external UART subroutines
 	extern  LCD_Setup, LCD_Write_Message	    ; external LCD subroutines
+	extern  LCD_Clear, LCD_To1stLine, LCD_To2ndLine ;external LCD subroutine part 2
 	
 acs0	udata_acs   ; reserve data space in access ram
 counter	    res 1   ; reserve one byte for a counter variable
@@ -41,7 +42,13 @@ loop 	tblrd*+			; one byte from PM to TABLAT, increment TBLPRT
 	decfsz	counter		; count down to zero
 	bra	loop		; keep going until finished
 		
-	movlw	myTable_l-1	; output message to LCD (leave out "\n")
+	;movlw	myTable_l-1	; output message to LCD (leave out "\n")
+	;lfsr	FSR2, myArray
+	;call	LCD_Write_Message
+	
+	call	LCD_To2ndLine
+	
+	movlw	myTable_l	; output message to LCD (leave out "\n")
 	lfsr	FSR2, myArray
 	call	LCD_Write_Message
 

@@ -15,7 +15,7 @@ LCD_counter res 1   ; reserve 1 byte for counting through nessage
 LCD	code
     
 LCD_Setup
-	clrf    LATB
+	clrf    LATB		; clear any residual remaining bits
 	movlw   b'11000000'	    ; RB0:5 all outputs
 	movwf	TRISB
 	movlw   .40
@@ -61,9 +61,9 @@ LCD_Send_Byte_I		    ; Transmits byte stored in W to instruction reg
 	andlw   0x0f	    ; select just low nibble
 	movwf   LATB	    ; output data bits to LCD
 	bcf	LATB, LCD_RS	; Instruction write clear RS bit
-	call    LCD_Enable  ; Pulse enable Bit 
-LCD_Send_Nib
+	call    LCD_Enable  ; Pulse enable Bit
 	movf	LCD_tmp,W   ; swap nibbles, now do low nibble
+LCD_Send_Nib
 	andlw   0x0f	    ; select just low nibble
 	movwf   LATB	    ; output data bits to LCD
 	bcf	LATB, LCD_RS    ; Instruction write clear RS bit

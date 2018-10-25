@@ -25,25 +25,25 @@ acs_kb udata_acs
 KeyBoard code
   
 KeyBoard_Setup
-    clrf    LATE
-    setf    TRISE
+    clrf    LATE	; getting rid of residuals
+    setf    TRISE	; turning off drive on pins
     banksel PADCFG1	; PADCFG1 is not in Access Bank!!
     bsf	    PADCFG1, REPU, BANKED   ; PortE pull-ups on
     movlb   0x00	; set BSR back to Bank 0
     
 KeyBoard_PressGet
     ; getting row
-    movlw   0x0F
+    movlw   0x0F	; turn latter 4 pins to output
     movwf   TRISE
-    movff   PORTE, rowcol
+    movff   PORTE, rowcol ; reading in value
     
     ; getting column
-    movlw   0xF0
+    movlw   0xF0	; turn first 4 bits to output
     movwf   TRISE
-    movf    PORTE, W
-    addwf   rowcol, f
+    movf    PORTE, W	; reading in value
+    addwf   rowcol, f	; merge two readings
     
-    negf    rowcol
+    negf    rowcol	; making up state as to pressed indicator
     return
     
 KeyBoard_Decode

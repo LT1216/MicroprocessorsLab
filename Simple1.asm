@@ -42,13 +42,13 @@ loop 	tblrd*+			; one byte from PM to TABLAT, increment TBLPRT
 	decfsz	counter		; count down to zero
 	bra	loop		; keep going until finished
 		
-	;movlw	myTable_l-1	; output message to LCD (leave out "\n")
-	;lfsr	FSR2, myArray
-	;call	LCD_Write_Message
+	movlw	myTable_l-1	; output message to LCD (leave out "\n")
+	lfsr	FSR2, myArray
+	call	LCD_Write_Message
 	
 	call	LCD_To2ndLine
 	
-	movlw	myTable_l	; output message to LCD (leave out "\n")
+	movlw	myTable_l-1	; output message to LCD (leave out "\n")
 	lfsr	FSR2, myArray
 	call	LCD_Write_Message
 

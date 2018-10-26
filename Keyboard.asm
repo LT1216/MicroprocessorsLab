@@ -5,22 +5,23 @@ acs_kb udata_acs
     rowcol	res 1	; reserve 1 byte for storing row and column
     
 
-    constant key11
-    constant key12
-    constant key13
-    constant key14
-    constant key21
-    constant key22
-    constant key23
-    constant key24
-    constant key31
-    constant key32
-    constant key33
-    constant key34
-    constant key41
-    constant key42
-    constant key43
-    constant key44
+    constant notpressed b'00000000'
+    constant key11  b'10001000'
+    constant key12  b'01001000'
+    constant key13  b'00101000'
+    constant key14  b'00011000'
+    constant key21  b'10000100'
+    constant key22  b'01000100'
+    constant key23  b'00100100'
+    constant key24  b'00010100'
+    constant key31  b'10000010'
+    constant key32  b'01000010'
+    constant key33  b'00100010'
+    constant key34  b'00010010'
+    constant key41  b'10000001'
+    constant key42  b'01000001'
+    constant key43  b'00100001'
+    constant key44  b'00010001'
   
 KeyBoard code
   
@@ -44,12 +45,18 @@ KeyBoard_PressGet
     addwf   rowcol, f	; merge two readings
     
     negf    rowcol	; making up state as to pressed indicator
+    setf    TRISE	; turning off drive on pins
+    
     return
     
 KeyBoard_Decode
     movf    rowcol, W
     
-    xorlw   key11
+    xorlw   notpressed
+    btfsc   STATUS, Z
+    goto    NoPress
+    
+    xorlw   key11^notpressed
     btfsc   STATUS, Z
     goto    Press11
     
@@ -115,3 +122,74 @@ KeyBoard_Decode
     
     goto    InvalidPress
     
+NoPress
+    
+    return
+    
+Press11
+    
+    return
+    
+Press12
+    
+    return
+
+Press13
+    
+    return
+
+Press14
+    
+    return
+
+Press21
+    
+    return
+
+Press22
+    
+    return
+
+Press23
+    
+    return
+
+Press24
+    
+    return
+
+Press31
+    
+    return
+
+Press32
+    
+    return
+
+Press33
+    
+    return
+
+Press34
+    
+    return
+
+Press41
+    
+    return
+
+Press42
+    
+    return
+
+Press43
+    
+    return
+
+Press44
+    ; stuff to do when
+    return
+
+InvalidPress
+    
+    return

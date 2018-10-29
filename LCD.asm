@@ -15,13 +15,13 @@ LCD_counter res 1   ; reserve 1 byte for counting through nessage
 LCD	code
     
 LCD_Setup
-	clrf    LATB		; clear any residual remaining bits
+	clrf    LATB
 	movlw   b'11000000'	    ; RB0:5 all outputs
 	movwf	TRISB
 	movlw   .40
 	call	LCD_delay_ms	; wait 40ms for LCD to start up properly
 	movlw	b'00110000'	; Function set 4-bit
-	call	LCD_Send_Nib
+	call	LCD_Send_Byte_I
 	movlw	.10		; wait 40us
 	call	LCD_delay_x4us
 	movlw	b'00101000'	; 2 line display 5x8 dot characters

@@ -1,5 +1,5 @@
 #include p18f87k22.inc
-    global Multiply_8_16
+    global Multiply_8_16, arg_8, arg_16, arg_24
 
 mul_args    udata_acs
     arg_8       res 1

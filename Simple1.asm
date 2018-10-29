@@ -61,6 +61,7 @@ loop 	tblrd*+			; one byte from PM to TABLAT, increment TBLPRT
 	; a delay subroutine if you need one, times around loop in delay_count
 delay	decfsz	delay_count	; decrement until zero
 	bra delay
+	
 	return
 
 	end

@@ -3,7 +3,7 @@
 	extern	UART_Setup, UART_Transmit_Message   ; external UART subroutines
 	extern  LCD_Setup, LCD_Write_Message	    ; external LCD subroutines
 	extern  LCD_Clear, LCD_To1stLine, LCD_To2ndLine ;external LCD subroutine part 2
-	extern	LCD_Write_Hex			    ; external LCD subroutines
+	extern	LCD_Write_Hex			    ; external LCD subroutines	for ADC
 	extern  ADC_Setup, ADC_Read		    ; external ADC routines
 	
 acs0	udata_acs   ; reserve data space in access ram

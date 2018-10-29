@@ -69,6 +69,8 @@ LCD_To2ndLine
 	call LCD_Send_Byte_I
 	movlw	.10		; wait 40us
 	call	LCD_delay_x4us
+	return
+	
 LCD_Write_Hex	    ; Writes byte stored in W as hex
 	movwf	LCD_hex_tmp
 	swapf	LCD_hex_tmp,W	; high nibble first

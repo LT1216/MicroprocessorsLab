@@ -1,27 +1,29 @@
-#include p18f87k22.inc
+	#include p18f87k22.inc
 
-
-acs_kb udata_acs    
-    rowcol	res 1	; reserve 1 byte for storing row and column
+	global KeyBoard_PressGet, KeyBoard_Setup, KeyBoard_Decode
+	extern LCD_Send_Byte_D, LCD_delay_x4us
     
+acs_kb	udata_acs    
+rowcol	res 1	; reserve 1 byte for storing row and column
 
-    constant notpressed b'00000000'
-    constant key11  b'10001000'
-    constant key12  b'01001000'
-    constant key13  b'00101000'
-    constant key14  b'00011000'
-    constant key21  b'10000100'
-    constant key22  b'01000100'
-    constant key23  b'00100100'
-    constant key24  b'00010100'
-    constant key31  b'10000010'
-    constant key32  b'01000010'
-    constant key33  b'00100010'
-    constant key34  b'00010010'
-    constant key41  b'10000001'
-    constant key42  b'01000001'
-    constant key43  b'00100001'
-    constant key44  b'00010001'
+
+    constant notpressed= b'00000000'
+    constant key11=  b'10001000'
+    constant key12=  b'01001000'
+    constant key13=  b'00101000'
+    constant key14=  b'00011000'
+    constant key21=  b'10000100'
+    constant key22=  b'01000100'
+    constant key23=  b'00100100'
+    constant key24=  b'00010100'
+    constant key31=  b'10000010'
+    constant key32=  b'01000010'
+    constant key33=  b'00100010'
+    constant key34=  b'00010010'
+    constant key41=  b'10000001'
+    constant key42=  b'01000001'
+    constant key43=  b'00100001'
+    constant key44=  b'00010001'
   
 KeyBoard code
   
@@ -31,6 +33,8 @@ KeyBoard_Setup
     banksel PADCFG1	; PADCFG1 is not in Access Bank!!
     bsf	    PADCFG1, REPU, BANKED   ; PortE pull-ups on
     movlb   0x00	; set BSR back to Bank 0
+    clrf    rowcol
+    return
     
 KeyBoard_PressGet
     ; getting row
@@ -38,13 +42,16 @@ KeyBoard_PressGet
     movwf   TRISE
     movff   PORTE, rowcol ; reading in value
     
+    movlw .10		    ; delay to let the pull ups reach max value
+    call LCD_delay_x4us
+    
     ; getting column
     movlw   0xF0	; turn first 4 bits to output
     movwf   TRISE
     movf    PORTE, W	; reading in value
     addwf   rowcol, f	; merge two readings
     
-    negf    rowcol	; making up state as to pressed indicator
+    comf    rowcol, f	; making up state as to pressed indicator
     setf    TRISE	; turning off drive on pins
     
     return
@@ -123,39 +130,48 @@ KeyBoard_Decode
     goto    InvalidPress
     
 NoPress
-    
+    movlw 0x2D
+    call LCD_Send_Byte_D
     return
     
 Press11
-    
+    movlw 0x31
+    call LCD_Send_Byte_D
     return
     
 Press12
-    
+    movlw 0x32
+    call LCD_Send_Byte_D
     return
 
 Press13
-    
+    movlw 0x33
+    call LCD_Send_Byte_D
     return
 
 Press14
-    
+    movlw 0x46
+    call LCD_Send_Byte_D
     return
 
 Press21
-    
+    movlw 0x34
+    call LCD_Send_Byte_D
     return
 
 Press22
-    
+    movlw 0x35
+    call LCD_Send_Byte_D
     return
 
 Press23
-    
+    movlw 0x36
+    call LCD_Send_Byte_D
     return
 
 Press24
-    
+    movlw 0x45
+    call LCD_Send_Byte_D
     return
 
 Press31
@@ -191,5 +207,8 @@ Press44
     return
 
 InvalidPress
-    
+    movlw 0x58
+    call LCD_Send_Byte_D
     return
+    
+end

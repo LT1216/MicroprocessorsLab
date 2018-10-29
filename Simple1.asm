@@ -5,6 +5,7 @@
 	extern  LCD_Clear, LCD_To1stLine, LCD_To2ndLine ;external LCD subroutine part 2
 	extern	LCD_Write_Hex			    ; external LCD subroutines	for ADC
 	extern  ADC_Setup, ADC_Read		    ; external ADC routines
+	extern	Multiply_8_16			    ; external 8x16 to 24 bits multiplier
 	
 acs0	udata_acs   ; reserve data space in access ram
 counter	    res 1   ; reserve one byte for a counter variable

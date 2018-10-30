@@ -1,3 +1,13 @@
+	; Description of what the code does:
+	;   1. define label myArray in RAM, with 0x80 bytes of memory
+	;   2. in program memory write the message "Hello World!\n", with label myTable
+	;   3. FSR0 pointing at myArray address
+	;   4. point the TBLPTR to program memory location of myTable
+	;   5. copy myTable message, byte by byte, to myArray
+	;   6. display msg on both lines of LCD.
+	;   7. send message to UART interface
+	
+	
 	#include p18f87k22.inc
 
 	extern	UART_Setup, UART_Transmit_Message   ; external UART subroutines
@@ -6,7 +16,7 @@
 	extern	LCD_Write_Hex			    ; external LCD subroutines	for ADC
 	extern  ADC_Setup, ADC_Read		    ; external ADC routines
 	extern	Multiply_8_16			    ; external 8x16 to 24 bits multiplier
-	extern	arg_8, arg_16, arg_24
+	extern	arg_8, arg_16, arg_24, temp_1
 	
 acs0	udata_acs   ; reserve data space in access ram
 counter	    res 1   ; reserve one byte for a counter variable
@@ -60,7 +70,7 @@ loop 	tblrd*+			; one byte from PM to TABLAT, increment TBLPRT
 	movlw	myTable_l	; output message to UART
 	lfsr	FSR2, myArray
 	call	UART_Transmit_Message
-	;*********Some code test multiplier subroutine********************
+	;*********Some code to test multiplier subroutine********************
 	movlw 0x04
 	movwf high(arg_16)
 	movlw 0xD2

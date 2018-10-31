@@ -72,7 +72,7 @@ loop 	tblrd*+			; one byte from PM to TABLAT, increment TBLPRT
 	call	UART_Transmit_Message
 	;*********Some code to test multiplier subroutine********************
 	movlw 0x04
-	movwf high(arg_16)
+	movwf HIGH arg_16
 	movlw 0xD2
 	movwf low(arg_16)
 	movlw 0x8A

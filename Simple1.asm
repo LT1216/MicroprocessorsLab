@@ -16,7 +16,7 @@
 	extern	LCD_Write_Hex			    ; external LCD subroutines	for ADC
 	extern  ADC_Setup, ADC_Read		    ; external ADC routines
 	extern	Multiply_8_16, arg_8, arg_16L, arg_16H, arg_24L, arg_24H, arg_24U, temp_1
-	extern	arg1_16L, arg1_16H, arg2_16L, arg2_16H, arg_32L, arg_32H, arg_32U, arg_32UU, Multiply_16_16
+	extern	arg1_16L, arg1_16H, arg2_16L, arg2_16H, arg_32L, arg_32H, arg_32U, arg_32UU, Multiply_16_16, Multiply_8_24
 	
 acs0	udata_acs   ; reserve data space in access ram
 counter	    res 1   ; reserve one byte for a counter variable
@@ -72,15 +72,15 @@ loop 	tblrd*+			; one byte from PM to TABLAT, increment TBLPRT
 	call	UART_Transmit_Message
 	;*********Some code to test multiplier subroutine********************
 	; use debugger and see that it works using memory registers for arg_32
-	movlw	0x04
-	movwf	arg1_16H
-	movlw	0xD2
-	movwf	arg1_16L
-	movlw	0x41
-	movwf	arg2_16H
-	movlw	0x8A
-	movwf	arg2_16L
-	call	Multiply_16_16
+	movlw	0x0A
+	movwf	arg_8
+	movlw	0x34
+	movwf	arg_24L
+	movlw	0xEB
+	movwf	arg_24H
+	movlw	0x3B
+	movwf	arg_24U
+	call	Multiply_8_24
 	
 measure_loop
 	call	ADC_Read

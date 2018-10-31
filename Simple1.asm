@@ -15,8 +15,7 @@
 	extern  LCD_Clear, LCD_To1stLine, LCD_To2ndLine ;external LCD subroutine part 2
 	extern	LCD_Write_Hex			    ; external LCD subroutines	for ADC
 	extern  ADC_Setup, ADC_Read		    ; external ADC routines
-	extern	Multiply_8_16			    ; external 8x16 to 24 bits multiplier
-	extern	arg_8, arg_16, arg_24, temp_1
+	extern	Multiply_8_16, arg_8, arg_16L, arg_16H, arg_24L, arg_24H, arg_24U, temp_1
 	
 acs0	udata_acs   ; reserve data space in access ram
 counter	    res 1   ; reserve one byte for a counter variable
@@ -71,14 +70,15 @@ loop 	tblrd*+			; one byte from PM to TABLAT, increment TBLPRT
 	lfsr	FSR2, myArray
 	call	UART_Transmit_Message
 	;*********Some code to test multiplier subroutine********************
+	; use debugger and see that it works using memory registers for arg_24
 	movlw 0x04
-	movwf HIGH arg_16
+	movwf arg_16H
 	movlw 0xD2
-	movwf low(arg_16)
+	movwf arg_16L
 	movlw 0x8A
 	movwf arg_8
 	call	Multiply_8_16
-	movf	arg_24, W
+	
 measure_loop
 	call	ADC_Read
 	movf	ADRESH,W

@@ -68,7 +68,6 @@ Multiply_16_16			    ; multiplies arg1_16 with arg2_16 and puts
 	return
 	
 Multiply_8_24				; multiplies arg_8 with arg_24 and puts the result in arg_32
-					; the result in arg_24
 	movff	arg_24L, arg_16L    ; prepare variables for Multiply_8_16	
 	movff	arg_24H, arg_16H
 					; the following is exactly the same code as Multiply_8_16

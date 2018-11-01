@@ -1,7 +1,7 @@
 #include p18f87k22.inc
     global Multiply_8_16, arg_8, arg_16L, arg_16H, arg_24L, arg_24H, arg_24U, temp_1
     global arg1_16L, arg1_16H, arg2_16L, arg2_16H, arg_32L, arg_32H, arg_32U, arg_32UU, Multiply_16_16, Multiply_8_24
-
+    global Hex_Dec_converter, MyHexL, MyHexH, MyDecL, MyDecH
 mul_args    udata_acs
     arg_8	res 1
     arg_16L	res 1
@@ -18,6 +18,10 @@ mul_args    udata_acs
     arg_32H	res 1
     arg_32U	res 1
     arg_32UU	res 1	; thus far are the terms needed for Multiply_16_16
+    MyHexL	res 1
+    MyHexH	res 1
+    MyDecL	res 1
+    MyDecH	res 1
 	
 routines code
 	
@@ -97,6 +101,41 @@ Multiply_8_24				; multiplies arg_8 with arg_24 and puts the result in arg_32
 	addwfc	PRODH, W
 	movwf	arg_32UU
 	return
-	
-    end
+
+Hex_Dec_converter	    ; converts 12 bit MyHex(stored as 2 bytes) to My_Dec	
+	movff	MyHexL, arg1_16L
+	movff	MyHexH, arg1_16H
+	movlw	0x41
+	movwf	arg2_16H
+	movlw	0x8A
+	movwf	arg2_16L
+	call	Multiply_16_16
+	swapf	arg_32UU, W
+	movwf	MyDecH	    ; MyDecH high nibble
+	movff	arg_32U, arg_24U
+	movff	arg_32H, arg_24H
+	movff	arg_32L, arg_24L
+	movlw	0x0A
+	movwf	arg_8
+	call	Multiply_8_24
+	movf	arg_32UU, W
+	addwf	MyDecH, F
+	movff	arg_32U, arg_24U
+	movff	arg_32H, arg_24H
+	movff	arg_32L, arg_24L
+	movlw	0x0A
+	movwf	arg_8
+	call	Multiply_8_24
+	swapf	arg_32UU, W
+	movwf	MyDecL
+	movff	arg_32U, arg_24U
+	movff	arg_32H, arg_24H
+	movff	arg_32L, arg_24L
+	movlw	0x0A
+	movwf	arg_8
+	call	Multiply_8_24
+	movf	arg_32UU, W
+	addwf	MyDecL
+	return	
+end
 

@@ -40,16 +40,20 @@ KeyBoard_PressGet
     ; getting row
     movlw   0x0F	; turn latter 4 pins to output
     movwf   TRISE
+    movlw .1		    ; delay to let the pull ups reach max value
+    call LCD_delay_x4us
     movff   PORTE, rowcol ; reading in value
     
-    movlw .10		    ; delay to let the pull ups reach max value
-    call LCD_delay_x4us
     
     ; getting column
     movlw   0xF0	; turn first 4 bits to output
     movwf   TRISE
+    movlw .1		    ; delay to let the pull ups reach max value
+    call LCD_delay_x4us
     movf    PORTE, W	; reading in value
     addwf   rowcol, f	; merge two readings
+    
+   
     
     comf    rowcol, f	; making up state as to pressed indicator
     setf    TRISE	; turning off drive on pins

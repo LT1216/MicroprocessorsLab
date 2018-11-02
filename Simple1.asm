@@ -41,10 +41,10 @@ setup	bcf	EECON1, CFGS	; point to Flash program memory
 	call	UART_Setup	; setup UART
 	call	LCD_Setup	; setup LCD
 	call	ADC_Setup	; setup ADC
-	goto	start
+	goto	start2
 	
 	; ******* Main programme ****************************************
-start 	lfsr	FSR0, myArray	; Load FSR0 with address in RAM	
+start1 	lfsr	FSR0, myArray	; Load FSR0 with address in RAM	
 	movlw	upper(myTable)	; address of data in PM
 	movwf	TBLPTRU		; load upper bits to TBLPTRU
 	movlw	high(myTable)	; address of data in PM
@@ -73,18 +73,35 @@ loop 	tblrd*+			; one byte from PM to TABLAT, increment TBLPRT
 	call	UART_Transmit_Message
 	;*********Some code to test multiplier subroutine********************
 	; use debugger and see that it works using memory registers for MyDecH:MyDecL
-	movlw	0x04
+start2	
+	movlw	0x06
 	movwf	MyHexH
-	movlw	0xD2
+	movlw	0x3f
 	movwf	MyHexL
+	nop
+	nop
 	call	Hex_Dec_converter
+	nop
 	
 measure_loop
+	nop
 	call	ADC_Read
-	movf	ADRESH,W
+	movff	ADRESH, MyHexH
+	movff	ADRESL, MyHexL
+	
+	call	LCD_To1stLine
+	movf	MyHexH, W
 	call	LCD_Write_Hex
-	movf	ADRESL,W
+	movf	MyHexL, W
 	call	LCD_Write_Hex
+
+	call	LCD_To2ndLine
+	call	Hex_Dec_converter
+	movf	MyDecH, W
+	call	LCD_Write_Hex
+	movf	MyDecL, W
+	call	LCD_Write_Hex
+	
 	goto	measure_loop		; goto current line in code
 
 	; a delay subroutine if you need one, times around loop in delay_count

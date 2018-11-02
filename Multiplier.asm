@@ -4,37 +4,43 @@
     global Hex_Dec_converter, MyHexL, MyHexH, MyDecL, MyDecH
 mul_args    udata_acs
     arg_8	res 1
-    arg_16L	res 1
     arg_16H	res 1
-    arg_24L	res 1
-    arg_24H	res 1
+    arg_16L	res 1
     arg_24U	res 1
+    arg_24H	res 1
+    arg_24L	res 1
     temp_1	res 1   ; thus far are the terms needed for Multiply_8_16
-    arg1_16L	res 1
     arg1_16H	res 1
-    arg2_16L	res 1
+    arg1_16L	res 1
     arg2_16H	res 1
-    arg_32L	res 1
-    arg_32H	res 1
+    arg2_16L	res 1
+    arg_32UU	res 1
     arg_32U	res 1
-    arg_32UU	res 1	; thus far are the terms needed for Multiply_16_16
-    MyHexL	res 1
+    arg_32H	res 1
+    arg_32L	res 1	; thus far are the terms needed for Multiply_16_16
     MyHexH	res 1
-    MyDecL	res 1
+    MyHexL	res 1
     MyDecH	res 1
+    MyDecL	res 1
 	
 routines code
 	
 Multiply_8_16			; multiplies arg_8 with arg_16 and puts
 				; the result in arg_24
+	clrf	arg_24L		; clearing out residuals from output
+	clrf	arg_24H
+	clrf	arg_24U
+	
 	;Low_byte_multiplication
 	movf	arg_8, W
 	mulwf	arg_16L	; result in PRODH:PRODL
+	nop
 	movf	PRODL, W
 	movwf	arg_24L
 	movff	PRODH, temp_1
 	movf	arg_8, W
 	mulwf	arg_16H	; result in PRODH:PRODL
+	nop
 	;High_byte
 	movf	temp_1, W
 	addwf	PRODL, W	; i.e.: the end result stored in W
@@ -50,6 +56,11 @@ Multiply_8_16			; multiplies arg_8 with arg_16 and puts
 
 Multiply_16_16			    ; multiplies arg1_16 with arg2_16 and puts
 				    ; the result in arg_32
+	clrf	arg_32L		    ; clearing outputs from residuals
+	clrf	arg_32H
+	clrf	arg_32U
+	clrf	arg_32UU
+	
 	movff	arg1_16H, arg_16H   ; setting values for Multiply_8_16
 	movff	arg1_16L, arg_16L
 	movff	arg2_16L, arg_8
@@ -76,11 +87,13 @@ Multiply_8_24				; multiplies arg_8 with arg_24 and puts the result in arg_32
 	;Low_byte_multiplication
 	movf	arg_8, W
 	mulwf	arg_16L	; result in PRODH:PRODL
+	nop
 	movf	PRODL, W
 	movwf	arg_32L
 	movff	PRODH, temp_1
 	movf	arg_8, W
 	mulwf	arg_16H	; result in PRODH:PRODL
+	nop
 	;High_byte
 	movf	temp_1, W
 	addwf	PRODL, W	; i.e.: the end result stored in W
@@ -94,6 +107,7 @@ Multiply_8_24				; multiplies arg_8 with arg_24 and puts the result in arg_32
 	movwf	arg_32U			; the equivalent of Multiply_8_16 ends here
 	movf	arg_8, W
 	mulwf	arg_24U	; result in PRODH:PRODL
+	nop
 	movf	PRODL, W
 	addwf	arg_32U, F
 	movlw	0x00
@@ -101,7 +115,12 @@ Multiply_8_24				; multiplies arg_8 with arg_24 and puts the result in arg_32
 	movwf	arg_32UU
 	return
 
-Hex_Dec_converter	    ; converts 12 bit MyHex(stored as 2 bytes) to My_Dec	
+Hex_Dec_converter	    ; converts 12 bit MyHex(stored as 2 bytes) to My_Dec
+	clrf	MyDecL	    ; clearing outputs from residuals
+	clrf	MyDecH
+	
+	;Problematic code
+	;-----
 	movff	MyHexL, arg1_16L
 	movff	MyHexH, arg1_16H
 	movlw	0x41
@@ -111,6 +130,9 @@ Hex_Dec_converter	    ; converts 12 bit MyHex(stored as 2 bytes) to My_Dec
 	call	Multiply_16_16
 	swapf	arg_32UU, W
 	movwf	MyDecH	    ; MyDecH high nibble
+	;------
+	
+	
 	movff	arg_32U, arg_24U
 	movff	arg_32H, arg_24H
 	movff	arg_32L, arg_24L
